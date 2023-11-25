@@ -1,0 +1,14 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/zmq-push/x64/Debug
+/zmq-rep/x64/Debug
+/zmq-req/x64/Debug
+/zmq-sub/x64/Debug
+/x64/Debug
+/zmq-agent/x64/Debug
+/zmq-proxy/x64/Debug
+/zmq-pub/x64/Debug
+/zmq-pull/x64/Debug
+/.vs/zmq-demo/v16

@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package msg;
+
+enum ITEM_TYPE
+{
+    UNKNOWN     = 0;
+	BOOL        = 1;
+    CHAR        = 2;
+	BYTE	    = 3;
+	INT16	    = 4;
+	UINT16	    = 5;
+	INT32	    = 6;
+	UINT32	    = 7;
+	INT64	    = 8;
+	UINT64	    = 9;
+	FLOAT32     = 10;
+	FLOAT64     = 11;
+    STRING      = 12;
+    STREAM      = 13;
+    BLOB        = 14;
+}
+
+message Variable {
+  oneof value
+  {
+    bool    b       = 1;    // BOOL-->BOOL
+    sint32  c       = 2;    // CHAR-->Integer
+    uint32  bt      = 3;     // BYTE-->Integer
+    sint32  wc      = 4;    // WCHAR-->Integer
+    sint32  i16     = 5;    // INT16-->Integer
+    uint32  u16     = 6;    // UINT16-->Integer
+    sint32  i32     = 7;    // INT32-->Integer
+    uint32  u32     = 8;    // UINT32-->Integer
+    sint64  i64     = 9;    // INT64-->Long
+    uint64  u64     = 10;   // UINT64-->Long
+    float   f32     = 11;   // FLOAT32-->Float
+    double  f64     = 12;   // FLOAT64-->Double
+    string  str     = 13;   // STRING-->STRING
+    int64   t       = 14;   // timestamp  1970-1-1 0:0:0.000 Microsecond //TIME  -->Long
+    bytes   stream  = 15;   // STREAM -->String
+    bytes   blob    = 16;   // BLOB-->String
+  }
+}
+
+message ItemValue {
+  // 位号
+  string n = 1;
+  // 时间戳
+  int64 t = 2;
+  // 质量码
+  int32 q = 3;
+  // 数据类型
+  ITEM_TYPE dt = 4;
+  // 数值
+  Variable v = 5;
+  // 位号ID
+  string nid = 6;
+}
+
+message BlockItemValue {
+  uint64 Idx = 1;
+  repeated ItemValue Values = 2;
+}
