@@ -1,4 +1,4 @@
-﻿// zmq-proxy.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+// zmq-proxy.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
 #include <future>
@@ -6,43 +6,117 @@
 #include <string>
 #include <thread>
 #include <random>
+#include <memory>
+#include <csignal>
+#include <condition_variable>
+#include <mutex>
 
 #include <zmq.hpp>
 #include <zmq_addon.hpp>
 
-void ProxyThread2(zmq::context_t* ctx)
+static std::mutex g_mtx_;
+static std::condition_variable g_cv_;
+static std::atomic_bool g_app_running_ = true;
+
+class Proxy
 {
-    zmq::socket_t frontend(*ctx, zmq::socket_type::router);
-    zmq::socket_t backend(*ctx, zmq::socket_type::dealer);
+    std::atomic_bool stoped_;
+
+    zmq::context_t context_;
+    std::unique_ptr<zmq::socket_t> frontend_;
+    std::unique_ptr<zmq::socket_t> backend_;
+    std::future<void> thread_result_;
+
+public:
+    Proxy(int io_threads = 1);
+
+public:
+    bool init();
+    bool start();
+    void stop();
+    void wait();
+
+private:
+    void _run();
+
+private:
+    static void stop_handler(int sig);
+};
+
+Proxy::Proxy(int io_threads) : context_(io_threads), stoped_(false)
+{
+    frontend_ = std::make_unique<zmq::socket_t>(context_, zmq::socket_type::router);
+    backend_ = std::make_unique<zmq::socket_t>(context_, zmq::socket_type::dealer);
+}
+
+bool Proxy::init()
+{
+    signal(SIGINT, stop_handler);
+    signal(SIGBREAK, stop_handler);
+    signal(SIGTERM, stop_handler);
 
     bool init = false;
 
-    do
+    try
     {
-        try
-        {
-            frontend.bind("tcp://*:5558");
-            backend.bind("tcp://*:5559");
-            init = true;
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << e.what() << std::endl;
-        }
-    } while (0);
-   
-    if (!init)
+        frontend_->bind("tcp://*:5558");
+        backend_->bind("tcp://*:5559");
+        init = true;
+    }
+    catch (const std::exception& e)
     {
-        return;
+        std::cerr << e.what() << std::endl;
     }
 
+    return init;
+}
+
+bool Proxy::start()
+{
+    stoped_ = false;
+
+    thread_result_ = std::async(std::launch::async, [this]() { this->_run(); });
+
+    return true;
+}
+
+void Proxy::stop()
+{
+    std::unique_lock<std::mutex> lock(g_mtx_);
+    g_app_running_ = false;
+
+    g_cv_.notify_one();
+}
+
+void Proxy::wait()
+{
+    {
+        std::unique_lock<std::mutex> lock(g_mtx_);
+        g_cv_.wait(lock, []() { return !g_app_running_; });
+    }
+
+    stoped_ = true;
+    thread_result_.wait();
+}
+
+void Proxy::stop_handler(int sig)
+{
+    std::unique_lock<std::mutex> lock(g_mtx_);
+
+    g_app_running_ = false;
+
+    g_cv_.notify_one();
+}
+
+void Proxy::_run()
+{
     zmq_pollitem_t poll_items[] =
     {
-        {frontend, 0, ZMQ_POLLIN, 0},
-        {backend, 0, ZMQ_POLLIN, 0},
+        {*frontend_.get(), 0, ZMQ_POLLIN, 0},
+        {*backend_.get(), 0, ZMQ_POLLIN, 0},
     };
 
-    while (1)
+    while (!stoped_)
     {
         zmq::message_t msg;
         size_t more = 0;
@@ -64,15 +138,16 @@ void ProxyThread2(zmq::context_t* ctx)
             // ROUTER 套接字有数据来
             if (poll_items[0].revents & ZMQ_POLLIN)
             {
+                int idx = 0;
                 while (1)
                 {
-                    frontend.recv(msg);
+                    frontend_->recv(msg);
 
-                    std::cout << "frontend " << msg << std::endl;
+                    std::cout << "frontend " << ++idx << " " << msg << std::endl;
 
-                    more = frontend.get(zmq::sockopt::rcvmore);
+                    more = frontend_->get(zmq::sockopt::rcvmore);
 
-                    backend.send(msg, more ? zmq::send_flags::sndmore : zmq::send_flags::none);
+                    backend_->send(msg, more ? zmq::send_flags::sndmore : zmq::send_flags::none);
 
                     if (!more)
                     {
@@ -87,12 +162,12 @@ void ProxyThread2(zmq::context_t* ctx)
                 while (1)
                 {
 
-                    backend.recv(msg);
+                    backend_->recv(msg);
 
                     std::cout << "backend " << msg << std::endl;
 
-                    more = backend.get(zmq::sockopt::rcvmore);
-                    frontend.send(msg, more ? zmq::send_flags::sndmore : zmq::send_flags::none);
+                    more = backend_->get(zmq::sockopt::rcvmore);
+                    frontend_->send(msg, more ? zmq::send_flags::sndmore : zmq::send_flags::none);
 
                     if (!more)
                     {
@@ -105,7 +180,6 @@ void ProxyThread2(zmq::context_t* ctx)
         {
             std::cerr << e.what() << std::endl;
         }
-        
     }
 }
 
@@ -114,10 +188,19 @@ int main(int argc, char** argv)
     int major, minor, patch;
     zmq::version(&major, &minor, &patch);
     printf("ZMQ Version: %d.%d.%d\n", major, minor, patch);
+    
+    printf("Proxy Start\n");
 
-    zmq::context_t ctx(4);
+    Proxy proxy(1);
+    if (proxy.init())
+    {
+        if (!proxy.start())
+        {
+            proxy.stop();
+        }
 
-    auto thread2 = std::async(std::launch::async, ProxyThread2, &ctx);
+        proxy.wait();
+    }
 
-    thread2.wait();
+    printf("Proxy Exit\n");
 }

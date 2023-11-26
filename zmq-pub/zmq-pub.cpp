@@ -1,4 +1,4 @@
-﻿// zmq-pub.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+// zmq-pub.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
 #include <future>
@@ -14,11 +14,11 @@
 
 #include "../protos/msg/msg.pb.h"
 
-std::atomic_bool _g_running = true;
+std::atomic_bool g_app_running_ = true;
 
 void stopHandler(int sign)
 {
-    _g_running = false;
+    g_app_running_ = false;
 }
 
 void PublisherThread(zmq::context_t* ctx) {
@@ -42,7 +42,7 @@ void PublisherThread(zmq::context_t* ctx) {
 
     int idx = 0;
     uint64_t msgId = 1;
-    while (_g_running)
+    while (g_app_running_)
     {
         msg::BlockItemValue package;
         for (int i = idx; i < idx + 10; i++)
