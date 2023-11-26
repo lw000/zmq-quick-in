@@ -4,7 +4,7 @@ package msg;
 
 enum ITEM_TYPE
 {
-    UNKNOWN     = 0;
+    EMPTY       = 0;
 	BOOL        = 1;
     CHAR        = 2;
 	BYTE	    = 3;
@@ -59,6 +59,6 @@ message ItemValue {
 }
 
 message BlockItemValue {
-  uint64 Idx = 1;
+  uint64 MsgId = 1;
   repeated ItemValue Values = 2;
 }

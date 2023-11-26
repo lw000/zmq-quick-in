@@ -84,7 +84,7 @@ void Proxy::stop()
 {
     std::unique_lock<std::mutex> lock(g_mtx_);
     g_app_running_ = false;
-
+    stoped_ = true;
     g_cv_.notify_one();
 }
 
@@ -198,7 +198,6 @@ int main(int argc, char** argv)
         {
             proxy.stop();
         }
-
         proxy.wait();
     }
 

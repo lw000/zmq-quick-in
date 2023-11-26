@@ -56,7 +56,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR BlockItemValue::BlockItemValue(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.values_)*/{}
-  , /*decltype(_impl_.idx_)*/uint64_t{0u}
+  , /*decltype(_impl_.msgid_)*/uint64_t{0u}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct BlockItemValueDefaultTypeInternal {
   PROTOBUF_CONSTEXPR BlockItemValueDefaultTypeInternal()
@@ -114,7 +114,7 @@ const uint32_t TableStruct_msg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::msg::BlockItemValue, _impl_.idx_),
+  PROTOBUF_FIELD_OFFSET(::msg::BlockItemValue, _impl_.msgid_),
   PROTOBUF_FIELD_OFFSET(::msg::BlockItemValue, _impl_.values_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -139,9 +139,9 @@ const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "m\030\017 \001(\014H\000\022\016\n\004blob\030\020 \001(\014H\000B\007\n\005value\"o\n\tIt"
   "emValue\022\t\n\001n\030\001 \001(\t\022\t\n\001t\030\002 \001(\003\022\t\n\001q\030\003 \001(\005"
   "\022\032\n\002dt\030\004 \001(\0162\016.msg.ITEM_TYPE\022\030\n\001v\030\005 \001(\0132"
-  "\r.msg.Variable\022\013\n\003nid\030\006 \001(\t\"=\n\016BlockItem"
-  "Value\022\013\n\003Idx\030\001 \001(\004\022\036\n\006Values\030\002 \003(\0132\016.msg"
-  ".ItemValue*\267\001\n\tITEM_TYPE\022\013\n\007UNKNOWN\020\000\022\010\n"
+  "\r.msg.Variable\022\013\n\003nid\030\006 \001(\t\"\?\n\016BlockItem"
+  "Value\022\r\n\005MsgId\030\001 \001(\004\022\036\n\006Values\030\002 \003(\0132\016.m"
+  "sg.ItemValue*\265\001\n\tITEM_TYPE\022\t\n\005EMPTY\020\000\022\010\n"
   "\004BOOL\020\001\022\010\n\004CHAR\020\002\022\010\n\004BYTE\020\003\022\t\n\005INT16\020\004\022\n"
   "\n\006UINT16\020\005\022\t\n\005INT32\020\006\022\n\n\006UINT32\020\007\022\t\n\005INT"
   "64\020\010\022\n\n\006UINT64\020\t\022\013\n\007FLOAT32\020\n\022\013\n\007FLOAT64"
@@ -1289,11 +1289,11 @@ BlockItemValue::BlockItemValue(const BlockItemValue& from)
   BlockItemValue* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.values_){from._impl_.values_}
-    , decltype(_impl_.idx_){}
+    , decltype(_impl_.msgid_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _this->_impl_.idx_ = from._impl_.idx_;
+  _this->_impl_.msgid_ = from._impl_.msgid_;
   // @@protoc_insertion_point(copy_constructor:msg.BlockItemValue)
 }
 
@@ -1303,7 +1303,7 @@ inline void BlockItemValue::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.values_){arena}
-    , decltype(_impl_.idx_){uint64_t{0u}}
+    , decltype(_impl_.msgid_){uint64_t{0u}}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1333,7 +1333,7 @@ void BlockItemValue::Clear() {
   (void) cached_has_bits;
 
   _impl_.values_.Clear();
-  _impl_.idx_ = uint64_t{0u};
+  _impl_.msgid_ = uint64_t{0u};
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1343,10 +1343,10 @@ const char* BlockItemValue::_InternalParse(const char* ptr, ::_pbi::ParseContext
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint64 Idx = 1;
+      // uint64 MsgId = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.idx_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _impl_.msgid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1393,10 +1393,10 @@ uint8_t* BlockItemValue::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint64 Idx = 1;
-  if (this->_internal_idx() != 0) {
+  // uint64 MsgId = 1;
+  if (this->_internal_msgid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(1, this->_internal_idx(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(1, this->_internal_msgid(), target);
   }
 
   // repeated .msg.ItemValue Values = 2;
@@ -1430,9 +1430,9 @@ size_t BlockItemValue::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // uint64 Idx = 1;
-  if (this->_internal_idx() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_idx());
+  // uint64 MsgId = 1;
+  if (this->_internal_msgid() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_msgid());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1454,8 +1454,8 @@ void BlockItemValue::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   (void) cached_has_bits;
 
   _this->_impl_.values_.MergeFrom(from._impl_.values_);
-  if (from._internal_idx() != 0) {
-    _this->_internal_set_idx(from._internal_idx());
+  if (from._internal_msgid() != 0) {
+    _this->_internal_set_msgid(from._internal_msgid());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1475,7 +1475,7 @@ void BlockItemValue::InternalSwap(BlockItemValue* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.values_.InternalSwap(&other->_impl_.values_);
-  swap(_impl_.idx_, other->_impl_.idx_);
+  swap(_impl_.msgid_, other->_impl_.msgid_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata BlockItemValue::GetMetadata() const {

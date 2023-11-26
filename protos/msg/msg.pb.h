@@ -64,7 +64,7 @@ PROTOBUF_NAMESPACE_CLOSE
 namespace msg {
 
 enum ITEM_TYPE : int {
-  UNKNOWN = 0,
+  EMPTY = 0,
   BOOL = 1,
   CHAR = 2,
   BYTE = 3,
@@ -83,7 +83,7 @@ enum ITEM_TYPE : int {
   ITEM_TYPE_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool ITEM_TYPE_IsValid(int value);
-constexpr ITEM_TYPE ITEM_TYPE_MIN = UNKNOWN;
+constexpr ITEM_TYPE ITEM_TYPE_MIN = EMPTY;
 constexpr ITEM_TYPE ITEM_TYPE_MAX = BLOB;
 constexpr int ITEM_TYPE_ARRAYSIZE = ITEM_TYPE_MAX + 1;
 
@@ -886,7 +886,7 @@ class BlockItemValue final :
 
   enum : int {
     kValuesFieldNumber = 2,
-    kIdxFieldNumber = 1,
+    kMsgIdFieldNumber = 1,
   };
   // repeated .msg.ItemValue Values = 2;
   int values_size() const;
@@ -906,13 +906,13 @@ class BlockItemValue final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg::ItemValue >&
       values() const;
 
-  // uint64 Idx = 1;
-  void clear_idx();
-  uint64_t idx() const;
-  void set_idx(uint64_t value);
+  // uint64 MsgId = 1;
+  void clear_msgid();
+  uint64_t msgid() const;
+  void set_msgid(uint64_t value);
   private:
-  uint64_t _internal_idx() const;
-  void _internal_set_idx(uint64_t value);
+  uint64_t _internal_msgid() const;
+  void _internal_set_msgid(uint64_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:msg.BlockItemValue)
@@ -924,7 +924,7 @@ class BlockItemValue final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg::ItemValue > values_;
-    uint64_t idx_;
+    uint64_t msgid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1933,24 +1933,24 @@ inline void ItemValue::set_allocated_nid(std::string* nid) {
 
 // BlockItemValue
 
-// uint64 Idx = 1;
-inline void BlockItemValue::clear_idx() {
-  _impl_.idx_ = uint64_t{0u};
+// uint64 MsgId = 1;
+inline void BlockItemValue::clear_msgid() {
+  _impl_.msgid_ = uint64_t{0u};
 }
-inline uint64_t BlockItemValue::_internal_idx() const {
-  return _impl_.idx_;
+inline uint64_t BlockItemValue::_internal_msgid() const {
+  return _impl_.msgid_;
 }
-inline uint64_t BlockItemValue::idx() const {
-  // @@protoc_insertion_point(field_get:msg.BlockItemValue.Idx)
-  return _internal_idx();
+inline uint64_t BlockItemValue::msgid() const {
+  // @@protoc_insertion_point(field_get:msg.BlockItemValue.MsgId)
+  return _internal_msgid();
 }
-inline void BlockItemValue::_internal_set_idx(uint64_t value) {
+inline void BlockItemValue::_internal_set_msgid(uint64_t value) {
   
-  _impl_.idx_ = value;
+  _impl_.msgid_ = value;
 }
-inline void BlockItemValue::set_idx(uint64_t value) {
-  _internal_set_idx(value);
-  // @@protoc_insertion_point(field_set:msg.BlockItemValue.Idx)
+inline void BlockItemValue::set_msgid(uint64_t value) {
+  _internal_set_msgid(value);
+  // @@protoc_insertion_point(field_set:msg.BlockItemValue.MsgId)
 }
 
 // repeated .msg.ItemValue Values = 2;

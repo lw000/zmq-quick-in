@@ -59,7 +59,7 @@ void PublisherThread(zmq::context_t* ctx) {
         }
 
         idx += 10;
-        package.set_idx(msgId++);
+        package.set_msgid(msgId++);
         package.SerializeToString(&buff_data);
 
         publisher.send(zmq::buffer(buff_data.c_str(), buff_data.size()));

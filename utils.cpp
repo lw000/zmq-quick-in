@@ -48,7 +48,7 @@ std::ostream& operator << (std::ostream& out, const msg::BlockItemValue& values)
     int idx = 1;
     for (auto& value : values.values())
     {
-        out << "[" << values.idx() << "] "
+        out << "[" << values.msgid() << "] "
             << idx++ << " "
             << value << std::endl;
     }
