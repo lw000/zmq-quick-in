@@ -121,9 +121,10 @@ void Proxy::_run()
         zmq::message_t msg;
         size_t more = 0;
 
+        int rc = 0;
         try
         {
-            int rc = zmq::poll(poll_items, 2, std::chrono::milliseconds(100));
+            rc = zmq::poll(poll_items, 2, std::chrono::milliseconds(100));
             // zmq::poll出错
             if (rc == -1)
             {
@@ -134,12 +135,21 @@ void Proxy::_run()
             {
                 continue;
             }
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "POLL:" << e.what() << std::endl;
 
-            // ROUTER 套接字有数据来
-            if (poll_items[0].revents & ZMQ_POLLIN)
+            break;
+        }
+
+        // ROUTER 套接字有数据来
+        if (poll_items[0].revents & ZMQ_POLLIN)
+        {
+            int idx = 0;
+            while (1)
             {
-                int idx = 0;
-                while (1)
+                try
                 {
                     frontend_->recv(msg);
 
@@ -154,14 +164,21 @@ void Proxy::_run()
                         break;
                     }
                 }
-            }
-
-            // DEALER套接字有数据来
-            if (poll_items[1].revents & ZMQ_POLLIN)
-            {
-                while (1)
+                catch (const std::exception& e)
                 {
+                    std::cerr << "ROUTER: " << e.what() << std::endl;
+                    break;
+                }
+            }
+        }
 
+        // DEALER 套接字有数据来
+        if (poll_items[1].revents & ZMQ_POLLIN)
+        {
+            while (1)
+            {
+                try
+                {
                     backend_->recv(msg);
 
                     std::cout << "backend " << msg << std::endl;
@@ -174,11 +191,12 @@ void Proxy::_run()
                         break;
                     }
                 }
+                catch (const std::exception& e)
+                {
+                    std::cerr << "DEALER: " << e.what() << std::endl;
+                    break;
+                }
             }
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << e.what() << std::endl;
         }
     }
 }
