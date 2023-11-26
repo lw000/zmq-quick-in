@@ -30,6 +30,33 @@
     <ClCompile Include="utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LoadBalance.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WeightedRandom.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RoundRobin.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WeightedRoundRobbin.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LeastActive.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WeightedLeastConnection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IPHash.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsistentHash.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="protos\msg\msg.pb.h">
@@ -39,6 +66,33 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ring_queue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadBalance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WeightedRandom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundRobin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WeightedRoundRobbin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LeastActive.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WeightedLeastConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IPHash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsistentHash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

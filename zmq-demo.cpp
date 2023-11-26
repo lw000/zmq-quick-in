@@ -16,6 +16,8 @@
 
 #include "ring_queue.h"
 
+#include "Random.h"
+
 void SubscriberThread1(zmq::context_t* ctx) {
     //  Prepare subscriber
     zmq::socket_t subscriber(*ctx, zmq::socket_type::sub);
@@ -154,6 +156,29 @@ int main() {
     printf("ZMQ Version: %d.%d.%d\n", major, minor, patch);
 
 
+    {
+        std::unique_ptr<LoadBalance> lb = std::make_unique<Random>();
+        lb->add("192.168.0.100", 1, 1);
+        lb->add("192.168.0.101", 1, 1);
+        lb->add("192.168.0.102", 1, 1);
+        lb->add("192.168.0.103", 1, 1);
+        lb->add("192.168.0.104", 1, 1);
+        lb->add("192.168.0.105", 1, 1);
+        lb->add("192.168.0.106", 1, 1);
+        lb->add("192.168.0.107", 1, 1);
+        lb->add("192.168.0.108", 1, 1);
+        lb->add("192.168.0.109", 1, 1);
+
+        for (int i = 0; i < 100; i++)
+        {
+            auto node = lb->doSelect();
+
+            std::cout << node.url_ << std::endl;
+        }
+    }
+
+    int c = getchar();
+
     RQ::ring_queue<int, 1024, 2> rq;
     std::thread t1([&rq]() {
         auto writable = rq.make_writable();
@@ -207,7 +232,6 @@ int main() {
         msg::ItemValue v1;
         v1.ParseFromString(data);
     }
-
 
     zmq::context_t ctx(0);
 

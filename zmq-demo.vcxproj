@@ -142,14 +142,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsistentHash.cpp" />
+    <ClCompile Include="IPHash.cpp" />
+    <ClCompile Include="LeastActive.cpp" />
+    <ClCompile Include="LoadBalance.cpp" />
     <ClCompile Include="protos\msg\msg.pb.cc" />
+    <ClCompile Include="Random.cpp" />
+    <ClCompile Include="RoundRobin.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="WeightedLeastConnection.cpp" />
+    <ClCompile Include="WeightedRandom.cpp" />
+    <ClCompile Include="WeightedRoundRobbin.cpp" />
     <ClCompile Include="zmq-demo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsistentHash.h" />
+    <ClInclude Include="IPHash.h" />
+    <ClInclude Include="LeastActive.h" />
+    <ClInclude Include="LoadBalance.h" />
     <ClInclude Include="protos\msg\msg.pb.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="ring_queue.h" />
+    <ClInclude Include="RoundRobin.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="WeightedLeastConnection.h" />
+    <ClInclude Include="WeightedRandom.h" />
+    <ClInclude Include="WeightedRoundRobbin.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
