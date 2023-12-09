@@ -27,7 +27,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmq-rep", "zmq-rep\zmq-rep.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmq-proxy", "zmq-proxy\zmq-proxy.vcxproj", "{A04E98E9-2F70-4329-B934-5015A8CB1A42}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmq-ipc", "..\zmq-ipc\zmq-ipc.vcxproj", "{A80155E2-C93F-4AC2-9094-D49DC7BA03A7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmq-ipc", "zmq-ipc\zmq-ipc.vcxproj", "{A80155E2-C93F-4AC2-9094-D49DC7BA03A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

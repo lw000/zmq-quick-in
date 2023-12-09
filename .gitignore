@@ -12,3 +12,4 @@
 /zmq-pub/x64/Debug
 /zmq-pull/x64/Debug
 /.vs/zmq-demo/v16
+/zmq-ipc/x64/Debug
